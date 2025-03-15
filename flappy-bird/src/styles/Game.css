@@ -172,18 +172,33 @@
     font-size: 30px;
     transition: transform 0.1s;
     z-index: 1;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    /* Enhanced 3D transforms and GPU acceleration */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-perspective: 1000;
+    perspective: 1000;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    /* Improved text rendering */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     /* Prevent selection */
     user-select: none;
     -webkit-user-select: none;
     /* Force hardware acceleration */
     will-change: transform;
-    /* Ensure emoji is rendered as expected */
-    text-rendering: optimizeLegibility;
+    /* Additional iOS fixes */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-tap-highlight-color: transparent;
+    /* Ensure proper text display */
+    white-space: nowrap;
+    /* Add subtle contrast */
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    /* Container fixes */
+    background-color: transparent;
+    overflow: visible;
 }
 
 .cloud {
