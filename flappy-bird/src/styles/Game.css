@@ -1,0 +1,934 @@
+.game-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.game {
+    width: 800px;
+    height: 500px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.5s;
+}
+
+/* Theme Styles */
+/* Classic theme */
+.game-classic {
+    background-color: #87CEEB;
+}
+
+/* Metal theme */
+.game-metal {
+    background: linear-gradient(180deg, #4a4a4a 0%, #6a6a6a 100%);
+}
+
+.game-metal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 40px,
+            rgba(255, 255, 255, 0.1) 40px,
+            rgba(255, 255, 255, 0.1) 80px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent 0,
+            transparent 40px,
+            rgba(255, 255, 255, 0.1) 40px,
+            rgba(255, 255, 255, 0.1) 80px
+        );
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* Bamboo theme */
+.game-bamboo {
+    background: linear-gradient(180deg, #4CAF50 0%, #388E3C 100%);
+}
+
+.game-bamboo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 60%
+        ),
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 60%
+        );
+    pointer-events: none;
+}
+
+/* Crystal theme */
+.game-crystal {
+    background: linear-gradient(180deg, #E3F2FD 0%, #90CAF9 100%);
+}
+
+.game-crystal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(
+            circle at 30% 20%,
+            rgba(255, 255, 255, 0.8) 0%,
+            transparent 60%
+        ),
+        radial-gradient(
+            circle at 70% 60%,
+            rgba(255, 255, 255, 0.6) 0%,
+            transparent 60%
+        );
+    animation: crystalShimmer 8s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes crystalShimmer {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0.3; }
+}
+
+/* Theme-specific pipe styles */
+.pipe {
+    position: absolute;
+    width: 60px;
+    z-index: 2;
+}
+
+/* Classic style pipes */
+.pipe-classic {
+    background-color: white;
+    box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Metal style pipes */
+.pipe-metal {
+    background: linear-gradient(90deg, #a8a8a8 0%, #d4d4d4 50%, #a8a8a8 100%);
+    box-shadow: 
+        inset -2px 0 4px rgba(0, 0, 0, 0.2),
+        2px 0 4px rgba(255, 255, 255, 0.5);
+    border: 1px solid #888;
+}
+
+/* Bamboo style pipes */
+.pipe-bamboo {
+    background-color: #4a8505;
+    background-image: 
+        linear-gradient(90deg, 
+            rgba(255, 255, 255, 0.1) 0%, 
+            rgba(255, 255, 255, 0.2) 25%,
+            rgba(255, 255, 255, 0.1) 50%);
+    box-shadow: inset -2px 0 4px rgba(0, 0, 0, 0.2);
+    border: 2px solid #2d5104;
+}
+
+/* Crystal style pipes */
+.pipe-crystal {
+    background-color: rgba(155, 220, 255, 0.6);
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        0 0 15px rgba(155, 220, 255, 0.5),
+        inset 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.pipe.top {
+    top: 0;
+}
+
+.pipe.bottom {
+    bottom: 0;
+}
+
+.bird {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 150px;
+    font-size: 30px;
+    transition: transform 0.1s;
+    z-index: 1;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent selection */
+    user-select: none;
+    -webkit-user-select: none;
+    /* Force hardware acceleration */
+    will-change: transform;
+    /* Ensure emoji is rendered as expected */
+    text-rendering: optimizeLegibility;
+}
+
+.cloud {
+    position: absolute;
+    width: 100px;
+    height: 40px;
+    background-color: white;
+    border-radius: 20px;
+    opacity: 0.8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 0;
+}
+
+.cloud::before,
+.cloud::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 50px;
+    height: 50px;
+    top: -20px;
+    left: 15px;
+}
+
+.cloud::after {
+    width: 40px;
+    height: 40px;
+    top: -15px;
+    right: 15px;
+}
+
+.start-message,
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 20;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(4px);
+    min-width: 500px;
+}
+
+.score,
+.high-score {
+    position: absolute;
+    right: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 20;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 5px;
+    backdrop-filter: blur(4px);
+}
+
+.score {
+    top: 20px;
+}
+
+.high-score {
+    top: 60px;
+}
+
+.game-over-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.restart-button,
+.change-player-button,
+.leaderboard-button {
+    padding: 8px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    height: 44px;
+    width: 150px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.restart-button {
+    background-color: #4CAF50;
+}
+
+.change-player-button {
+    background-color: #2196F3;
+}
+
+.leaderboard-button {
+    background-color: #FFA726;
+}
+
+.restart-button:hover,
+.change-player-button:hover,
+.leaderboard-button:hover {
+    transform: scale(1.05);
+}
+
+.restart-button:hover {
+    background-color: #45a049;
+}
+
+.change-player-button:hover {
+    background-color: #1976D2;
+}
+
+.leaderboard-button:hover {
+    background-color: #FB8C00;
+}
+
+/* Settings styles */
+.settings-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 15;
+    padding: 8px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.settings-button:hover {
+    transform: rotate(45deg);
+}
+
+.settings-panel {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 250px;
+}
+
+.settings-panel h3 {
+    margin: 0 0 15px;
+    color: #333;
+}
+
+.settings-section {
+    margin-bottom: 20px;
+}
+
+.settings-section h4 {
+    margin: 0 0 10px;
+    color: #444;
+    font-size: 16px;
+}
+
+.theme-options {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.theme-button {
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-button:hover {
+    background-color: #f5f5f5;
+    border-color: #bbb;
+    transform: scale(1.1);
+}
+
+.theme-button.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #45a049;
+}
+
+.leaderboard {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 250px;
+}
+
+.leaderboard h2 {
+    margin: 0 0 15px;
+    color: #333;
+    text-align: center;
+}
+
+.leaderboard-entry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.player-emoji {
+    font-size: 24px;
+}
+
+.player-name {
+    flex-grow: 1;
+    font-weight: bold;
+    color: #333;
+}
+
+.player-score {
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.emoji-selection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 2;
+}
+
+.emoji-selection h2 {
+    margin: 0 0 15px;
+    color: #333;
+}
+
+.emoji-options {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.emoji-button {
+    font-size: 32px;
+    padding: 10px 20px;
+    background-color: white;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Prevent selection */
+    user-select: none;
+    -webkit-user-select: none;
+    /* Force hardware acceleration */
+    will-change: transform;
+    /* Ensure emoji is rendered as expected */
+    text-rendering: optimizeLegibility;
+    /* Ensure proper emoji display */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    min-height: 60px;
+}
+
+.emoji-button:hover {
+    transform: scale(1.1);
+}
+
+.name-input-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 20;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.name-input-container p {
+    margin: 0 0 15px;
+    color: #333;
+}
+
+.name-input-container input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.name-input-container button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.name-input-container button:hover {
+    background-color: #45a049;
+}
+
+.celebration-emoji {
+    position: absolute;
+    font-size: 24px;
+    animation: fadeInOut 3s ease-in-out forwards;
+    z-index: 30;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0);
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(-20px) scale(1);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(-40px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-60px) scale(0.5);
+    }
+}
+
+/* Tree styles for bamboo theme */
+.tree {
+    position: absolute;
+    z-index: 0;
+    width: var(--tree-width, 120px);
+    height: var(--tree-height, 200px);
+    bottom: 0;
+}
+
+.tree::before,
+.tree::after,
+.tree span {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: calc(var(--tree-width, 120px) * 0.4) solid transparent;
+    border-right: calc(var(--tree-width, 120px) * 0.4) solid transparent;
+    border-bottom: calc(var(--tree-height, 200px) * 0.25) solid rgba(0, 0, 0, 0.3);
+}
+
+.tree::before {
+    bottom: calc(var(--tree-height, 200px) * 0.3);
+}
+
+.tree::after {
+    bottom: calc(var(--tree-height, 200px) * 0.5);
+    border-left: calc(var(--tree-width, 120px) * 0.3) solid transparent;
+    border-right: calc(var(--tree-width, 120px) * 0.3) solid transparent;
+    border-bottom: calc(var(--tree-height, 200px) * 0.2) solid rgba(0, 0, 0, 0.3);
+}
+
+.tree span {
+    position: absolute;
+    bottom: calc(var(--tree-height, 200px) * 0.65);
+    border-left: calc(var(--tree-width, 120px) * 0.2) solid transparent;
+    border-right: calc(var(--tree-width, 120px) * 0.2) solid transparent;
+    border-bottom: calc(var(--tree-height, 200px) * 0.15) solid rgba(0, 0, 0, 0.3);
+}
+
+.tree .trunk {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(var(--tree-width, 120px) * 0.1);
+    height: calc(var(--tree-height, 200px) * 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+}
+
+/* Replace car with geometric gear for metal theme */
+.gear {
+    position: absolute;
+    width: var(--gear-size, 60px);
+    height: var(--gear-size, 60px);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    z-index: 0;
+    animation: rotate 4s linear infinite;
+}
+
+.gear::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(var(--gear-size, 60px) * 0.3);
+    height: calc(var(--gear-size, 60px) * 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.gear::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    clip-path: polygon(
+        50% 0%, 45% 10%, 55% 10%,
+        90% 10%, 85% 20%, 95% 20%,
+        100% 50%, 90% 45%, 90% 55%,
+        90% 90%, 80% 85%, 80% 95%,
+        50% 100%, 45% 90%, 55% 90%,
+        10% 90%, 15% 80%, 5% 80%,
+        0% 50%, 10% 45%, 10% 55%,
+        10% 10%, 20% 15%, 20% 5%
+    );
+    background: rgba(255, 255, 255, 0.05);
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Remove old car styles */
+.car {
+    display: none;
+}
+
+/* Snowflake styles for crystal theme */
+.snowflake {
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    z-index: 0;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+}
+
+/* Remove cloud styles from non-classic themes */
+.game-metal .cloud,
+.game-bamboo .cloud,
+.game-crystal .cloud {
+    display: none;
+}
+
+/* Settings panel content */
+.settings-panel h3 {
+    margin: 0 0 15px;
+    color: #333;
+}
+
+.volume-control {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.test-sounds {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.test-sounds button {
+    padding: 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.test-sounds button:hover {
+    background-color: #e0e0e0;
+}
+
+.volume-control label {
+    color: #333;
+    font-weight: bold;
+}
+
+.volume-control input[type="range"] {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    background: #ddd;
+    border-radius: 4px;
+    outline: none;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.volume-control input[type="range"]::-webkit-slider-thumb:hover {
+    background: #45a049;
+}
+
+.close-settings {
+    width: 100%;
+    padding: 8px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.close-settings:hover {
+    background-color: #1976D2;
+}
+
+/* Background Elements */
+/* Cloud styles */
+.cloud {
+    position: absolute;
+    width: 100px;
+    height: 40px;
+    background-color: white;
+    border-radius: 20px;
+    opacity: 0.8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 0;
+}
+
+.cloud::before,
+.cloud::after {
+    content: '';
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 50px;
+    height: 50px;
+    top: -20px;
+    left: 15px;
+}
+
+.cloud::after {
+    width: 40px;
+    height: 40px;
+    top: -15px;
+    right: 15px;
+}
+
+/* Snowflake styles */
+.snowflake {
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0.8;
+    z-index: 0;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+}
+
+/* Theme-specific text colors */
+.game-metal .score,
+.game-metal .high-score,
+.game-metal .start-message,
+.game-metal .game-over {
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Power-up styles */
+.power-up {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    z-index: 3;
+}
+
+.power-up-flash {
+    animation: flash 0.3s ease-out;
+    font-size: 32px; /* Slightly larger when collected */
+}
+
+@keyframes flash {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2);
+    }
+}
+
+/* Classic theme - Sun */
+.power-up-classic {
+    background: radial-gradient(circle at center, #FFD700 30%, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 20px #FFD700;
+    animation: sunPulse 2s ease-in-out infinite;
+}
+
+.power-up-classic::before {
+    content: '☀️';
+    position: absolute;
+    font-size: 24px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes sunPulse {
+    0%, 100% { box-shadow: 0 0 20px #FFD700; }
+    50% { box-shadow: 0 0 30px #FFD700; }
+}
+
+/* Metal theme - Bolt */
+.power-up-metal {
+    background: linear-gradient(135deg, #B8B8B8 0%, #F0F0F0 50%, #B8B8B8 100%);
+    clip-path: polygon(40% 0%, 60% 0%, 60% 40%, 100% 40%, 100% 60%, 60% 60%, 60% 100%, 40% 100%, 40% 60%, 0% 60%, 0% 40%, 40% 40%);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Bamboo theme - Leaf */
+.power-up-bamboo {
+    background: radial-gradient(circle at 30% 30%, #4CAF50 0%, #388E3C 100%);
+    clip-path: path('M15 2 C8 2 2 8 2 15 C2 22 15 30 15 30 C15 30 28 22 28 15 C28 8 22 2 15 2 Z');
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+}
+
+/* Crystal theme - Snowflake */
+.power-up-crystal {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, rgba(200, 232, 255, 0.6) 100%);
+    clip-path: polygon(
+        50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
+        50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+    );
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    animation: crystalSparkle 3s ease-in-out infinite;
+}
+
+@keyframes crystalSparkle {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+/* Active power-up effect on bird */
+.bird-powered {
+    filter: brightness(1.5);
+    animation: powerPulse 0.5s ease-in-out infinite;
+}
+
+@keyframes powerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Bird size reduction effect */
+.bird-small {
+    transform: scale(0.5);
+}
+
+/* Slow motion effect */
+.game-slowed .pipe,
+.game-slowed .cloud,
+.game-slowed .tree,
+.game-slowed .gear,
+.game-slowed .snowflake {
+    animation-duration: 200% !important;
+    transition-duration: 200% !important;
+}
+
+.game-slowed .cloud,
+.game-slowed .tree,
+.game-slowed .gear,
+.game-slowed .snowflake {
+    animation-duration: 200% !important;
+    transition-duration: 200% !important;
+}
